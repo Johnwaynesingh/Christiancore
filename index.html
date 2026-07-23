@@ -304,6 +304,20 @@ footer { background: var(--ink); color: var(--ivory); padding: 60px 24px 30px; }
 </head>
 <body>
 <div id="root"></div>
+<div id="fatal-error" style="display:none; position:fixed; inset:0; background:#FAF6EC; color:#900; font-family:monospace; font-size:14px; padding:24px; z-index:9999; overflow:auto; white-space:pre-wrap;"></div>
+<script>
+  function showFatalError(msg) {
+    var box = document.getElementById('fatal-error');
+    box.style.display = 'block';
+    box.textContent = 'Something broke while loading the site:\n\n' + msg + '\n\nPlease screenshot this and send it back.';
+  }
+  window.addEventListener('error', function (e) {
+    showFatalError((e.message || 'Unknown error') + '\n(file: ' + e.filename + ' line ' + e.lineno + ')');
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    showFatalError('Promise error: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+  });
+</script>
 
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -964,95 +978,4 @@ function App() {
           <h2>Find what you came for</h2>
         </div>
         <div className="divider"><span className="mark">✝</span></div>
-        <div className="cat-grid">
-          {CATEGORIES.map(cat => (
-            <div className="cat-card" key={cat.id} onClick={() => scrollTo(cat.id)}>
-              <img src={cat.img} alt={cat.label} />
-              <div className="cat-label">
-                <div className="name">{cat.label}</div>
-                <div className="count">Shop now</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* PRODUCT SECTIONS */}
-      <ProductSection id="chains" kicker="Category" title="Chains" products={products.chains} onAdd={addToCart} addedId={addedId} />
-      <ProductSection id="bracelets" kicker="Category" title="Bracelets & Watches" products={products.bracelets} onAdd={addToCart} addedId={addedId} alt />
-      <ProductSection id="bibles" kicker="Category" title="Bibles" products={products.bibles} onAdd={addToCart} addedId={addedId} promo />
-
-      {/* FAITH STRIP */}
-      <div className="faith-strip">
-        <div className="divider"><span className="mark">✝</span></div>
-        <h2>Gifts From Christ — pieces with a purpose</h2>
-        <p>Every gift set is curated with care, packed beautifully, and ready to give. Whether it is a birthday, a baptism, or just because — we have something that will mean something.</p>
-      </div>
-
-      <ProductSection id="phonecovers" kicker="Category" title="Phone Covers" products={products.phonecovers} onAdd={addToCart} addedId={addedId} alt />
-      <ProductSection id="appliances" kicker="Category" title="Household Appliances" products={products.appliances} onAdd={addToCart} addedId={addedId} />
-      <ProductSection id="mens" kicker="Category" title="Men's" products={products.mens} onAdd={addToCart} addedId={addedId} alt />
-      <ProductSection id="womens" kicker="Category" title="Women's" products={products.womens} onAdd={addToCart} addedId={addedId} />
-      <ProductSection id="kids" kicker="Category" title="Kids" products={products.kids} onAdd={addToCart} addedId={addedId} alt />
-      <ProductSection id="shoes" kicker="Category" title="Shoes" products={products.shoes} onAdd={addToCart} addedId={addedId} />
-      <ProductSection id="gifts" kicker="Special" title="Gifts From Christ" products={products.gifts} onAdd={addToCart} addedId={addedId} alt />
-
-      {/* CONTACT */}
-      <ContactForm />
-
-      {/* FOOTER */}
-      <footer>
-        <div className="foot-wrap">
-          <div>
-            <h4>ChristianCore Co.</h4>
-            <p>Faith-inspired jewellery, apparel, and gifts. Based in Durban, shipping across South Africa.</p>
-            <p style={{ marginTop: 12 }}>📍 Durban, KwaZulu-Natal</p>
-          </div>
-          <div>
-            <h4>Shop</h4>
-            {navLinks.map(l => (
-              <a key={l.id} onClick={() => scrollTo(l.id)} style={{ cursor: 'pointer' }}>{l.label}</a>
-            ))}
-          </div>
-          <div>
-            <h4>Info</h4>
-            <a onClick={() => setModal('shipping')} style={{ cursor: 'pointer' }}>Shipping Policy</a>
-            <a onClick={() => setModal('returns')} style={{ cursor: 'pointer' }}>Returns & Exchanges</a>
-            <a onClick={() => setModal('privacy')} style={{ cursor: 'pointer' }}>Privacy Policy</a>
-            <a onClick={() => scrollTo('contact')} style={{ cursor: 'pointer' }}>Contact Us</a>
-          </div>
-          <div>
-            <h4>Connect</h4>
-            <a href="https://wa.me/27748238307" target="_blank" rel="noreferrer">WhatsApp Us</a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram</a>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer">Facebook</a>
-            <a href="mailto:hello@christiancoreco.co.za">Email Us</a>
-          </div>
-        </div>
-        <div className="foot-bottom">
-          <div className="foot-legal">
-            <span onClick={() => setModal('shipping')}>Shipping Policy</span>
-            <span onClick={() => setModal('returns')}>Returns</span>
-            <span onClick={() => setModal('privacy')}>Privacy Policy</span>
-          </div>
-          <p style={{ marginTop: 12 }}>© {new Date().getFullYear()} ChristianCore Co. All rights reserved. Durban, South Africa.</p>
-        </div>
-      </footer>
-
-      {/* CART DRAWER */}
-      <CartDrawer open={cartOpen} cart={cart} onClose={() => setCartOpen(false)} onRemove={removeFromCart} />
-
-      {/* WHATSAPP */}
-      <WhatsAppWidget />
-
-      {/* POLICY MODAL */}
-      <PolicyModal policyKey={modal} onClose={() => setModal(null)} />
-    </>
-  )
-}
-
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-</script>
-</body>
-</html>
+        <d
